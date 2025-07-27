@@ -1,3 +1,5 @@
+use std::string;
+
 use egui::{text_selection::visuals, FontData, FontDefinitions, FontFamily};
 
 use crate::oshandler::handler::BibouHandler;
@@ -6,6 +8,8 @@ pub struct BibouGui {
     alertcount: usize,
     sessiontimer: usize,
     handler: BibouHandler,
+    sessionactive: bool,
+    displayedimage: Option<String>,
 }
 
 impl Default for BibouGui {
@@ -13,7 +17,9 @@ impl Default for BibouGui {
         BibouGui {
             alertcount: 0,
             sessiontimer: 0,
-            handler: BibouHandler::default()
+            handler: BibouHandler::default(),
+            sessionactive: false,
+            displayedimage: None,
         }
     }
 }
@@ -47,6 +53,19 @@ impl eframe::App for BibouGui {
 
             ui.vertical_centered_justified(|ui| {
                 ui.label(egui::RichText::new("Bibou Watcher").size(56.0));
+                ui.add_space(10.0);
+                if !self.sessionactive {
+                    if ui.button("Démarrer une session").clicked() {
+                        self.sessionactive = true;
+                        self.displayedimage = Some("../../assets/bibou-papouilles1-unscreen.gif".to_string());
+                    }
+                } else {
+                    if ui.button("Mettre fin à la session").clicked() {
+                        self.sessionactive = false;
+                    }
+                }
+                ui.image(&self.displayedimage.clone().unwrap_or_default());
+
             });
         });
     }
