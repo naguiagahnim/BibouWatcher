@@ -57,14 +57,16 @@ impl eframe::App for BibouGui {
                 if !self.sessionactive {
                     if ui.button("Démarrer une session").clicked() {
                         self.sessionactive = true;
-                        self.displayedimage = Some("../../assets/bibou-papouilles1-unscreen.gif".to_string());
+                        self.displayedimage = Some("../../assets/gifs/bibou-papouilles1-unscreen.gif".to_string());
                     }
                 } else {
                     if ui.button("Mettre fin à la session").clicked() {
                         self.sessionactive = false;
                     }
                 }
-                ui.image(&self.displayedimage.clone().unwrap_or_default());
+                if let Some(image) = &self.displayedimage {
+                    ui.image(image);
+                }
 
             });
         });
