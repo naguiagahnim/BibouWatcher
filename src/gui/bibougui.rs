@@ -1,15 +1,15 @@
-use std::string;
-
-use egui::{text_selection::visuals, FontData, FontDefinitions, FontFamily};
-
+use egui::{include_image, text_selection::visuals, FontData, FontDefinitions, FontFamily};
 use crate::oshandler::handler::BibouHandler;
+
+const BIBOU_GIF: egui::ImageSource<'_> = include_image!("../../assets/gifs/bibou.gif");
+const SHARK1: egui::ImageSource<'_> = include_image!("../../assets/images/shark.png");
+
 
 pub struct BibouGui {
     alertcount: usize,
     sessiontimer: usize,
     handler: BibouHandler,
     sessionactive: bool,
-    displayedimage: Option<String>,
 }
 
 impl Default for BibouGui {
@@ -19,13 +19,15 @@ impl Default for BibouGui {
             sessiontimer: 0,
             handler: BibouHandler::default(),
             sessionactive: false,
-            displayedimage: None,
         }
     }
 }
 
 impl eframe::App for BibouGui {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+        //Handle image support
+        egui_extras::install_image_loaders(ctx);
+
         //Styling and custom fonts handling
 
         let mut visuals = egui::Visuals::dark();
@@ -57,17 +59,14 @@ impl eframe::App for BibouGui {
                 if !self.sessionactive {
                     if ui.button("Démarrer une session").clicked() {
                         self.sessionactive = true;
-                        self.displayedimage = Some("../../assets/gifs/bibou-papouilles1-unscreen.gif".to_string());
                     }
+                    ui.add(egui::Image::new(SHARK1).max_width(1000.0));
                 } else {
                     if ui.button("Mettre fin à la session").clicked() {
                         self.sessionactive = false;
                     }
+                    ui.add(egui::Image::new(BIBOU_GIF).max_width(1000.0));
                 }
-                if let Some(image) = &self.displayedimage {
-                    ui.image(image);
-                }
-
             });
         });
     }
