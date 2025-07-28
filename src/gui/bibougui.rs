@@ -1,4 +1,4 @@
-use egui::{include_image, text_selection::visuals, FontData, FontDefinitions, FontFamily};
+use egui::{include_image, FontData, FontDefinitions, FontFamily};
 use crate::oshandler::handler::BibouHandler;
 
 const BIBOU_GIF: egui::ImageSource<'_> = include_image!("../../assets/gifs/bibou.gif");
@@ -58,14 +58,25 @@ impl eframe::App for BibouGui {
                 ui.add_space(10.0);
                 if !self.sessionactive {
                     if ui.button("Démarrer une session").clicked() {
-                        self.sessionactive = true;
+                        self.sessionactive = true;        
                     }
                     ui.add(egui::Image::new(SHARK1).max_width(1000.0));
                 } else {
                     if ui.button("Mettre fin à la session").clicked() {
                         self.sessionactive = false;
                     }
-                    ui.add(egui::Image::new(BIBOU_GIF).max_width(1000.0));
+                    ui.add(egui::Image::new(BIBOU_GIF).max_width(300.0));
+                    //Gestion de l'os à faire
+                    ui.add_space(10.0);
+                    self.sessiontimer += 1;
+
+                    let secondes = self.sessiontimer / 60;
+                    let minutes = secondes / 60;
+                    let heures = minutes / 60;
+
+                    let time_string = format!("{:02}:{:02}:{:02}", heures, minutes % 60, secondes % 60);
+
+                    ui.label(egui::RichText::new(time_string).size(30.0));
                 }
             });
         });
