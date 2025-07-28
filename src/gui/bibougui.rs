@@ -58,7 +58,8 @@ impl eframe::App for BibouGui {
                 ui.add_space(10.0);
                 if !self.sessionactive {
                     if ui.button("Démarrer une session").clicked() {
-                        self.sessionactive = true;        
+                        self.sessionactive = true;
+                        self.sessiontimer = 0;     
                     }
                     ui.add(egui::Image::new(SHARK1).max_width(1000.0));
                 } else {
