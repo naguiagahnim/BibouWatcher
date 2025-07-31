@@ -70,7 +70,8 @@ impl eframe::App for BibouGui {
 
                         self.cancel_token = Some(token);
 
-                        spawn(BibouHandler::watch_for_events(cloned_token));
+                        let mut handler = BibouHandler::default();
+                        spawn(async move {handler.watch_for_events(cloned_token).await});
                     }
                     ui.add(egui::Image::new(SHARK1).max_width(1000.0));
                 } else {
