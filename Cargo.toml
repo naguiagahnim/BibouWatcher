@@ -4,7 +4,10 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+device_query = "4.0.1"
 eframe = "0.32.0"
 egui = "0.32.0"
 egui_extras = { version = "0.32", features = ["gif", "image"] }
 image = { version = "0.25", features = ["gif"] }
+tokio = { version = "1.47.0", features = ["full"] }
+tokio-util = "0.7.15"

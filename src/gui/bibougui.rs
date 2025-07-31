@@ -1,4 +1,6 @@
 use egui::{include_image, FontData, FontDefinitions, FontFamily};
+use tokio::spawn;
+use tokio_util::sync::CancellationToken;
 use crate::oshandler::handler::BibouHandler;
 
 const BIBOU_GIF: egui::ImageSource<'_> = include_image!("../../assets/gifs/bibou.gif");
@@ -10,6 +12,7 @@ pub struct BibouGui {
     sessiontimer: usize,
     handler: BibouHandler,
     sessionactive: bool,
+    cancel_token: Option<CancellationToken>,
 }
 
 impl Default for BibouGui {
@@ -19,6 +22,7 @@ impl Default for BibouGui {
             sessiontimer: 0,
             handler: BibouHandler::default(),
             sessionactive: false,
+            cancel_token: None,
         }
     }
 }
@@ -59,15 +63,26 @@ impl eframe::App for BibouGui {
                 if !self.sessionactive {
                     if ui.button("Démarrer une session").clicked() {
                         self.sessionactive = true;
-                        self.sessiontimer = 0;     
+                        self.sessiontimer = 0;
+
+                        let token = CancellationToken::new();
+                        let cloned_token = token.clone();
+
+                        self.cancel_token = Some(token);
+
+                        spawn(BibouHandler::watch_for_events(cloned_token));
                     }
                     ui.add(egui::Image::new(SHARK1).max_width(1000.0));
                 } else {
                     if ui.button("Mettre fin à la session").clicked() {
                         self.sessionactive = false;
+
+                        if let Some(token) = &self.cancel_token {
+                            token.cancel();
+                            self.cancel_token = None;
+                        }
                     }
                     ui.add(egui::Image::new(BIBOU_GIF).max_width(300.0));
-                    //Gestion de l'os à faire
                     ui.add_space(10.0);
                     self.sessiontimer += 1;
 

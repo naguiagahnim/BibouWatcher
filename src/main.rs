@@ -1,6 +1,7 @@
 use WorkBibou::gui::bibougui::BibouGui;
 
-fn main() -> eframe::Result {
+#[tokio::main]
+async fn main() -> eframe::Result {
     let native_options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
         .with_title("Talos"),
