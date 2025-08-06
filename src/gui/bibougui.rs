@@ -8,9 +8,7 @@ const SHARK1: egui::ImageSource<'_> = include_image!("../../assets/images/shark.
 
 
 pub struct BibouGui {
-    alertcount: usize,
     sessiontimer: usize,
-    handler: BibouHandler,
     sessionactive: bool,
     cancel_token: Option<CancellationToken>,
 }
@@ -18,9 +16,7 @@ pub struct BibouGui {
 impl Default for BibouGui {
     fn default() -> Self {
         BibouGui {
-            alertcount: 0,
             sessiontimer: 0,
-            handler: BibouHandler::default(),
             sessionactive: false,
             cancel_token: None,
         }

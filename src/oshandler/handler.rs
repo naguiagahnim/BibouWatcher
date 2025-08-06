@@ -7,6 +7,7 @@ use tokio_util::sync::CancellationToken;
 pub struct BibouHandler {
     inactivitytimer: usize,
     inactivitycount: usize,
+    alertcount: usize,
     device_state: Option<DeviceEventsHandler>,
 }
 
@@ -15,6 +16,7 @@ impl Default for BibouHandler {
         BibouHandler { 
             inactivitytimer: 0,
             inactivitycount: 0,
+            alertcount: 0,
             device_state: None,
         }
     }
